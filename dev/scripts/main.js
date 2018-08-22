@@ -97,7 +97,6 @@ foodApp.events = () => {
 //  the init method initializes all the necessary methods when the page loads
 foodApp.init = () => {
     foodApp.events();
-    // foodApp.getAllRecipes('ground beef', '', '&allowedCuisine[]=cuisine^cuisine-italian&allowedCuisine[]=cuisine^cuisine-mexican&allowedCuisine[]=cuisine^cuisine-cuban');
 };
 
 //  document.ready to call the init method once the page is finished loading
