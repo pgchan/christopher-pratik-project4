@@ -4,37 +4,78 @@
         //  Then filter the results based on the other criteria - starting with course type - then cuisine type - then dietary restrcitions
 //  The data is pulled from the API and displayed onto the page in a list
     //  The filtered results will then be broken down into individual recipes - displaying an image of the dish, the name of the dish and a description of it
+    //  need to store recipe id from each filtered result and do a separate pull to get the info from there
 //  The recipes will be clickable to take them to a full view of them
     //  The recipes will be opened in a new tab
 
 const foodApp = {};
 
-foodApp.apiURL = 'http://api.yummly.com/v1/api/recipes?_app_id=71ec3e04';
-foodApp.apiKey = 'cc1fd4f6ce167c1198febd162fea8392';
+foodApp.apiID = '?_app_id=71ec3e04'
+foodApp.apiKey = '&_app_key=cc1fd4f6ce167c1198febd162fea8392';
+foodApp.allRecipiesApiURL = `http://api.yummly.com/v1/api/recipes${foodApp.apiID}`;
+foodApp.singleRecipeApiURL = 'http://api.yummly.com/v1/api/recipe/';
+foodApp.recipeList = [];
 
-foodApp.getRecipes = (ingredients, courseType, cuisineType, dietary) => {
+
+//  the getAllRecipes method takes in the parameters from the search form and gets the matching data from the API
+foodApp.getAllRecipes = (ingredients, dietary, cuisineType) => {
     $.ajax ({
-        url: foodApp.apiURL,
+        url: `${foodApp.allRecipiesApiURL}${foodApp.apiKey}${dietary}${cuisineType}`,
         method: 'GET',
         dataType: 'json',
         data: {
-            _app_key: foodApp.apiKey,
-            // q: ingredients,
-            // 'allowedCourse[]': `course^course-${courseType}`,
-            // 'allowedCuisine[]': `cuisine^cuisine-${cuisineType}`,
-            'allowedDiet[]': dietary
+            q: ingredients,
+            maxResult: 20,
+            start: 0,
         }
     })
-
     .then((result) => {
-        console.log(result);
+        foodApp.displayRecipes(result.matches);
     });
 }
 
+//  the getSingleRecipe method takes in a recipeID and pulls the info for that specific recipe
+foodApp.getSingleRecipe = (recipeID, recipeIndex) => {
+    $.ajax ({
+        url: `${foodApp.singleRecipeApiURL}${recipeID}${foodApp.apiID}${foodApp.apiKey}`,
+        method: 'GET',
+        dataType: 'json',
+    })
+    .then((result) => {
+        foodApp.recipeList[recipeIndex] = result;
+    });
+}
+
+//  the displayRecipes method takes the recipes and breaks them down to be displayed on screen
+foodApp.displayRecipes = (recipes) => {
+    let recipeIndex = 0;
+    recipes.forEach((item) => {
+        foodApp.getSingleRecipe(item.id, recipeIndex);
+        recipeIndex++;
+    });
+    console.log(foodApp.recipeList);
+}
+
+//  values to grab when displaying recipe to the page:
+//  .images.hostedLargeUrl
+//  .name
+//  .source.sourceRecipeUrl
+//  .totalTime
+//  .numberOfServings
+//  .attributes.course
+//  .attributes.cuisine
+
+//  the events method will hold general event listeners for the site
+foodApp.events = () => {
+
+}
+
+//  the init method initializes all the necessary methods when the page loads
 foodApp.init = () => {
-    foodApp.getRecipes('chicken', 'Appetizers', 'italian', '403^Paleo');
+    foodApp.getAllRecipes('ground beef', '', '&allowedCuisine[]=cuisine^cuisine-italian&allowedCuisine[]=cuisine^cuisine-mexican&allowedCuisine[]=cuisine^cuisine-cuban');
 };
 
+//  document.ready to call the init method once the page is finished loading
 $(function() {
     foodApp.init();
 });
@@ -47,13 +88,13 @@ $(function() {
 /* maxResult, start : The maxResult and start parameters allow pagination and # of results control. By default 6 recipes are returned by the search API.
 For example, if you want 10 recipes per page and want to see the second page of results, you would append &maxResult=10&start=10. Start is set to 10 versus because the numbering for results starts at 0 (versus 1).
 For example: http://api.yummly.com/v1/api/recipes?_app_id=YOUR_ID&_app_key=YOUR_APP_KEY&q=onion+soup
-&maxResult=10&start=10 */
+&maxResult=20&start=10 */
 //  can have a variable in place of the 10 for start that would increase on each Load More button click.
 
 
-//  values for cuisines have to all be in lower case
-//  cuisine^cuisine-american
-//  cuisine^cuisine-kid-friendly
+//  values for cuisines have to all be in lower case - all should start with &allowedCuisine[]=
+//  &allowedCuisine[]=cuisine^cuisine-american
+//  &allowedCuisine[]=cuisine^cuisine-kid-friendly
 //  cuisine^cuisine-italian
 //  cuisine^cuisine-asian
 //  cuisine^cuisine-mexican
@@ -79,7 +120,7 @@ For example: http://api.yummly.com/v1/api/recipes?_app_id=YOUR_ID&_app_key=YOUR_
 //  cuisine^cuisine-hungarian
 //  cuisine^cuisine-portuguese
 
-//  values for dietary are as follows:
+//  values for dietary are as follows: - all should start with &allowedDiet[]=
 //  386^Vegan
 //  387^Lacto-ovo vegetarian
 //  388^Lacto vegetarian
@@ -87,7 +128,7 @@ For example: http://api.yummly.com/v1/api/recipes?_app_id=YOUR_ID&_app_key=YOUR_
 //  390^Pescetarian
 //  403^Paleo
 
-//  values for course types are as follows:
+//  values for course types are as follows: - all should start with &allowedCourse[]=
 //  course^course-Main Dishes
 //  course^course-Desserts
 //  course^course-Side Dishes
