@@ -6,7 +6,8 @@
 // }
 
 body {
-	// margin: 0 auto;
+	// margin: 0 auto
+	box-sizing: border-box;
 }
 
 .wrapper {
@@ -14,10 +15,23 @@ body {
 	margin: 0 auto;
 }
 
+nav {
+    display: block;
+    padding: 5px 0;
+    position: fixed;
+  	margin-top: 0;
+    top: 0;
+    width: 100%;
+    background: lightgrey;
+}
+
 .main-menu {
 	display: flex;
 	justify-content: space-around;
 	padding: 10px 0;
+
+
+
 }
 
 ul {
@@ -27,10 +41,12 @@ ul {
 .sub-menu {
 	padding-left: 0;
 	display: none;
+	position: absolute;
 }
 
 .main-menu li:hover .sub-menu {
 	display: block;
+	background: lightgrey;
 }
 
 // input[type=radio], input[type=checkbox] {
@@ -42,5 +58,6 @@ ul {
 	background-color: blue;
 } 
 
-#pizza-small:checked ~ .small-pizza {
-  background-image: url("assets/small-pizza-color.svg"); }
+.recipeList {
+	margin-top: 60px;
+}
