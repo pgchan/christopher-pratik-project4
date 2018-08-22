@@ -7,74 +7,108 @@
 	<title>Food Project</title>
 	<link rel="stylesheet" href="public/styles/style.css">
 </head>
+
+<style>
+
+	body {
+	 margin: 0 auto;
+	}
+
+	.wrapper {
+		max-width: 1140px;
+	}
+
+	.main-menu {
+		display: flex;
+		justify-content: space-around;
+	}
+
+	ul {
+		list-style-type: none;
+	}
+
+	.sub-menu {
+		padding-left: 0;
+		display: none;
+	}
+
+	/* .main-menu li:hover {
+		background-color: lightgrey;
+	} */
+
+	.main-menu li:hover .sub-menu {
+		display: block;
+	}
+
+</style>
+
 <body>
-
-
 
 	<nav>
 		<form action="">
-			<ul>
-				<li><input type="text" name="search" placeholder="Search for recipes"></li>
-				<li>course type
-					<ul>
-						<li>appetizers</li>
-						<li>breads</li>
-						<li>breakfast and brunch</li>
-						<li>beverages</li>
-						<li>cocktails</li>
-						<li>condiments and sauces</li>
-						<li>desserts</li>
-						<li>lunch</li>
-						<li>main dishes</li>
-						<li>salads</li>
-						<li>side dishes</li>
-						<li>snacks</li>
-						<li>soups</li>
+			<ul class="main-menu wrapper">
+				<li class="search-bar"><input type="text" name="search" placeholder="Search for recipes"></li>
+				<li class="course-type">course type
+					<ul class="sub-menu">
+						<li><input type="radio" name="course-type" value="course-Appetizers">appetizers</li>
+						<li><input type="radio" name="course-type" value="course-Beverages">beverages</li>
+						<li><input type="radio" name="course-type" value="course-Breads">breads</li>
+						<li><input type="radio" name="course-type" value="course-Breakfast and Brunch">breakfast and brunch</li>
+						<li><input type="radio" name="course-type" value="course-Cocktails">cocktails</li>
+						<li><input type="radio" name="course-type" value="course-Condiments and Sauces">condiments and sauces</li>
+						<li><input type="radio" name="course-type" value="course-Desserts">desserts</li>
+						<li><input type="radio" name="course-type" value="course-Lunch">lunch</li>
+						<li><input type="radio" name="course-type" value="course-Main Dishes">main dishes</li>
+						<li><input type="radio" name="course-type" value="course-Salads">salads</li>
+						<li><input type="radio" name="course-type" value="course-Side Dishes">side dishes</li>
+						<li><input type="radio" name="course-type" value="course-Snacks">snacks</li>
+						<li><input type="radio" name="course-type" value="course-Soups">soups</li>
+						<li><input type="radio" name="course-type" value="none">none</li>
 					</ul>
 				</li>
-				<li>cuisine type
-					<ul>
-						<li><input type="checkbox" name="american" value="american">american</li>
-						<li><input type="checkbox" name="barbecue" value="">barbecue</li>
-						<li><input type="checkbox" name="cajun & creole" value="">cajun & creole</li>
-						<li><input type="checkbox" name="chinese" value="">chinese</li>
-						<li><input type="checkbox" name="cuban" value="">cuban</li>
-						<li><input type="checkbox" name="english" value="">english</li>
-						<li><input type="checkbox" name="french" value="">french</li>
-						<li><input type="checkbox" name="german" value="">german</li>
-						<li><input type="checkbox" name="greek" value="">greek</li>
-						<li><input type="checkbox" name="hawaiian" value="">hawaiian</li>
-						<li><input type="checkbox" name="hungarian" value="">hungarian</li>
-						<li><input type="checkbox" name="indian" value="">indian</li>
-						<li><input type="checkbox" name="irish" value="">irish</li>
-						<li><input type="checkbox" name="italian" value="">italian</li>
-						<li><input type="checkbox" name="japanese" value="">japanese</li>
-						<li><input type="checkbox" name="kid-friendly" value="">kid-friendly</li>
-						<li><input type="checkbox" name="mediterranean" value="">mediterranean</li>
-						<li><input type="checkbox" name="mexican" value="">mexican</li>
-						<li><input type="checkbox" name="moroccan" value="">moroccan</li>
-						<li><input type="checkbox" name="portuguese" value="">portuguese</li>
-						<li><input type="checkbox" name="spanish" value="">spanish</li>
-						<li><input type="checkbox" name="southern & soul" value="">southern & soul</li>
-						<li><input type="checkbox" name="southwestern" value="">southwestern</li>
-						<li><input type="checkbox" name="swedish" value="">swedish</li>
-						<li><input type="checkbox" name="thai" value="">thai</li>
+				<li class="cuisine-type">cuisine type
+					<ul class="sub-menu">
+						<li><input type="checkbox" name="american" value="cuisine-american">american</li>
+						<li><input type="checkbox" name="barbecue" value="cuisine-barbecue-bbq">barbecue</li>
+						<li><input type="checkbox" name="cajun & creole" value="cuisine-cajun">cajun & creole</li>
+						<li><input type="checkbox" name="chinese" value="cuisine-chinese">chinese</li>
+						<li><input type="checkbox" name="cuban" value="cuisine-cuban">cuban</li>
+						<li><input type="checkbox" name="english" value="cuisine-english">english</li>
+						<li><input type="checkbox" name="french" value="cuisine-french">french</li>
+						<li><input type="checkbox" name="german" value="cuisine-german">german</li>
+						<li><input type="checkbox" name="greek" value="cuisine-greek">greek</li>
+						<li><input type="checkbox" name="hawaiian" value="cuisine-hawaiian">hawaiian</li>
+						<li><input type="checkbox" name="hungarian" value="cuisine-hungarian">hungarian</li>
+						<li><input type="checkbox" name="indian" value="cuisine-indian">indian</li>
+						<li><input type="checkbox" name="irish" value="cuisine-irish">irish</li>
+						<li><input type="checkbox" name="italian" value="cuisine-italian">italian</li>
+						<li><input type="checkbox" name="japanese" value="cuisine-japanese">japanese</li>
+						<li><input type="checkbox" name="kid-friendly" value="cuisine-kid-friendly">kid-friendly</li>
+						<li><input type="checkbox" name="mediterranean" value="cuisine-mediterranean">mediterranean</li>
+						<li><input type="checkbox" name="mexican" value="cuisine-mexican">mexican</li>
+						<li><input type="checkbox" name="moroccan" value="cuisine-moroccan">moroccan</li>
+						<li><input type="checkbox" name="portuguese" value="cuisine-portuguese">portuguese</li>
+						<li><input type="checkbox" name="spanish" value="cuisine-spanish">spanish</li>
+						<li><input type="checkbox" name="southern & soul" value="cuisine-southern">southern & soul</li>
+						<li><input type="checkbox" name="southwestern" value="cuisine-southwstern">southwestern</li>
+						<li><input type="checkbox" name="swedish" value="cuisine-swedish">swedish</li>
+						<li><input type="checkbox" name="thai" value="cuisine-thai">thai</li>
 					</ul>
 				</li>
-				<li>dietary restrictions
-					<ul>
-						<li>lacto vegetarian</li>
-						<li>ovo vegetarian</li>
-						<li>pescetarian</li>
-						<li>vegan</li>
-						<li>vegetarian</li>
+				<li class="dietary-restrictions">dietary restrictions
+					<ul class="sub-menu">
+						<li><input type="radio" name="dietary-restrictions" value="Lacto vegetarian">lacto vegetarian</li>
+						<li><input type="radio" name="dietary-restrictions" value="Lacto-ovo vegetarian">lacto-ovo vegetarian</li>
+						<li><input type="radio" name="dietary-restrictions" value="Ovo vegetarian">ovo vegetarian</li>
+						<li><input type="radio" name="dietary-restrictions" value="Paleo">paleo</li>
+						<li><input type="radio" name="dietary-restrictions" value="Pescetarian">pescetarian</li>
+						<li><input type="radio" name="dietary-restrictions" value="Vegan">vegan</li>
+						<li><input type="radio" name="dietary-restrictions" value="none">none</li>
 					</ul>
 				</li>
-				<li><button>Submit</button></li>
+				<li class="submit"><button>Submit</button></li>
 			</ul>
 
-			 <!-- cuisine type - checklist -->
-			 <!-- dietary restrictions - dropdown menu-->
 		</form>
 	</nav>
 
@@ -83,59 +117,28 @@
 </body>
 </html>
 
-<<<<<<< HEAD
 
 
 <!-- 
-	American, 
-	 Asian,
-	 Barbecue,
-	 Cajun & Creole,
-	 chinese
-	 Cuban
-	 English,
-	 French
-	 German,
-	 Greek,
-	 Hawaiin
-	 Hungarian
-	Indian, 
-	 Irish
-	 Italian
-	 Japanese
-	Mediterranean,
-	 Mexican
-	 Moroccan
-	 Portugese
-	 Spanish
-	 Southern & Soul Food, 
-	 Southwestern,
-	swedish
-	Thai
 
-
-
-	, 
-
-
-	Dietary: 
-	Lacto vegetarian, 
-	Ovo vegetarian, 
-	Pescetarian, 
-	Vegan, 
-	Vegetarian 
-	
+// values for course types are as follows: 
+// course^course-Main Dishes 
+// course^course-Desserts
+// course^course-Side Dishes 
+// course^course-Appetizers 
+// course^course-Salads 
+// course^course-Breakfast and Brunch 
+// course^course-Breads 
+// course^course-Soups 
+// course^course-Beverages 
+// course^course-Condiments and Sauces 
+// course^course-Cocktails
+// course^course-Snacks 
+// course^course-Lunch
 	
 
-
-Course Type: Main Dishes, Desserts, Side Dishes, Lunch and Snacks, Appetizers, Salads, Breads, Breakfast and Brunch, Soups, Beverages, Condiments and Sauces, Cocktails 
-
-Cuisine Type: American, Italian, Asian, Mexican, Southern & Soul Food, French, Southwestern, Barbecue, Indian, Chinese, Cajun & Creole, English, Mediterranean, Greek, Spanish, German, Thai, Moroccan, Irish, Japanese, Cuban, Hawaiin, Swedish, Hungarian, Portugese
-
-Dietary: Lacto vegetarian, Ovo vegetarian, Pescetarian, Vegan, Vegetarian
 
 -->
-=======
 <!-- Customer enters their required search parameters (ingredients, course type, cusisine type, dietary restrictions) -->
 	<!-- Example of a search for chicken and broccoli / Main dish / Italian / No dietary restriction -->
 		<!-- Do an API call for all recipes with chicken and broccoli -->
@@ -144,4 +147,3 @@ Dietary: Lacto vegetarian, Ovo vegetarian, Pescetarian, Vegan, Vegetarian
 	<!-- The filtered results will then be broken down into individual recipes - displaying an image of the dish, the name of the dish and a description of it -->
 <!-- The recipes will be clickable to take them to a full view of them -->
 	<!-- The recipes will be opened in a new tab -->
->>>>>>> b7e75edaa38bddda5392a64ac3c19b2a90b537dd
