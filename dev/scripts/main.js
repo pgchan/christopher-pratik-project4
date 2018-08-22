@@ -35,25 +35,34 @@ foodApp.getAllRecipes = (ingredients, dietary, cuisineType) => {
 }
 
 //  the getSingleRecipe method takes in a recipeID and pulls the info for that specific recipe
-foodApp.getSingleRecipe = (recipeID, recipeIndex) => {
+foodApp.getSingleRecipe = (recipeID) => {
     $.ajax ({
         url: `${foodApp.singleRecipeApiURL}${recipeID}${foodApp.apiID}${foodApp.apiKey}`,
         method: 'GET',
         dataType: 'json',
     })
     .then((result) => {
-        foodApp.recipeList[recipeIndex] = result;
+        foodApp.recipeList.push(result);
+        console.log(result)
+        const showRecipe = `<div>
+        <img src='${result.images[0].hostedLargeUrl}'>
+        <h2>${result.name}</h2>
+        <h3>Total Time to Prepare: ${result.totalTime}</h3>
+        <h3>Number of Servings: ${result.numberOfServings}</h3>
+        <h3>Course Types: ${result.attributes.course}</h3>
+        <h3>Cuisine Types: ${result.attributes.cuisine}</h3>
+        </div>`
+        $('.recipeList').append(showRecipe);
+        //  can use a for in loop to go through the object
     });
 }
 
 //  the displayRecipes method takes the recipes and breaks them down to be displayed on screen
 foodApp.displayRecipes = (recipes) => {
-    let recipeIndex = 0;
+    $('.recipeList').empty();
     recipes.forEach((item) => {
-        foodApp.getSingleRecipe(item.id, recipeIndex);
-        recipeIndex++;
+        foodApp.getSingleRecipe(item.id);
     });
-    console.log(foodApp.recipeList);
 }
 
 //  values to grab when displaying recipe to the page:
