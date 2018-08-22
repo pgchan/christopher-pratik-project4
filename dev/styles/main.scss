@@ -30,8 +30,6 @@ nav {
 	justify-content: space-around;
 	padding: 10px 0;
 
-
-
 }
 
 ul {
@@ -60,4 +58,21 @@ ul {
 
 .recipeList {
 	margin-top: 60px;
+	display: flex;
+	flex-wrap: wrap;
+	justify-content: space-around;
 }
+
+// goes in div class 
+
+
+
+.recipe-container{
+ flex: 0 1 calc(33% - 20px)
+}
+
+.img-container {
+	width: 100%;
+	& img { width: 100%;}
+}
+
