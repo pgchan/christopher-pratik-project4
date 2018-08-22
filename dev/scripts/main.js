@@ -1,12 +1,12 @@
 //  Customer enters their required search parameters (ingredients, course type, cusisine type, dietary restrictions)
-    //  Example of a search for chicken and broccoli / Main dish / Italian / No dietary restriction
-        //  Do an API call for all recipes with chicken and broccoli
-        //  Then filter the results based on the other criteria - starting with course type - then cuisine type - then dietary restrcitions
+//  Example of a search for chicken and broccoli / Main dish / Italian / No dietary restriction
+//  Do an API call for all recipes with chicken and broccoli
+//  Then filter the results based on the other criteria - starting with course type - then cuisine type - then dietary restrcitions
 //  The data is pulled from the API and displayed onto the page in a list
-    //  The filtered results will then be broken down into individual recipes - displaying an image of the dish, the name of the dish and a description of it
-    //  need to store recipe id from each filtered result and do a separate pull to get the info from there
+//  The filtered results will then be broken down into individual recipes - displaying an image of the dish, the name of the dish and a  description of it
+//  need to store recipe id from each filtered result and do a separate pull to get the info from there
 //  The recipes will be clickable to take them to a full view of them
-    //  The recipes will be opened in a new tab
+//  The recipes will be opened in a new tab
 
 const foodApp = {};
 
@@ -15,7 +15,6 @@ foodApp.apiKey = '&_app_key=cc1fd4f6ce167c1198febd162fea8392';
 foodApp.allRecipiesApiURL = `http://api.yummly.com/v1/api/recipes${foodApp.apiID}`;
 foodApp.singleRecipeApiURL = 'http://api.yummly.com/v1/api/recipe/';
 foodApp.recipeList = [];
-
 
 //  the getAllRecipes method takes in the parameters from the search form and gets the matching data from the API
 foodApp.getAllRecipes = (ingredients, courseType, cuisineType, dietary) => {
