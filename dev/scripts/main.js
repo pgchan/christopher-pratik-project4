@@ -18,9 +18,9 @@ foodApp.recipeList = [];
 
 
 //  the getAllRecipes method takes in the parameters from the search form and gets the matching data from the API
-foodApp.getAllRecipes = (ingredients, dietary, cuisineType) => {
+foodApp.getAllRecipes = (ingredients, courseType, cuisineType, dietary) => {
     $.ajax ({
-        url: `${foodApp.allRecipiesApiURL}${foodApp.apiKey}${dietary}${cuisineType}`,
+        url: `${foodApp.allRecipiesApiURL}${foodApp.apiKey}${courseType}${cuisineType}${dietary}`,
         method: 'GET',
         dataType: 'json',
         data: {
@@ -44,13 +44,18 @@ foodApp.getSingleRecipe = (recipeID) => {
     .then((result) => {
         foodApp.recipeList.push(result);
         console.log(result)
+        const courses = result.attributes.course.join(', ');
+        let cuisine = "";
+        if (result.attributes.cuisine) {
+            cuisine = result.attributes.cuisine.join(', ');
+        }
         const showRecipe = `<div>
         <img src='${result.images[0].hostedLargeUrl}'>
         <h2>${result.name}</h2>
         <h3>Total Time to Prepare: ${result.totalTime}</h3>
         <h3>Number of Servings: ${result.numberOfServings}</h3>
-        <h3>Course Types: ${result.attributes.course}</h3>
-        <h3>Cuisine Types: ${result.attributes.cuisine}</h3>
+        <h3>Course Types: ${courses}</h3>
+        <h3>Cuisine Types: ${cuisine}</h3>
         </div>`
         $('.recipeList').append(showRecipe);
         //  can use a for in loop to go through the object
@@ -76,12 +81,22 @@ foodApp.displayRecipes = (recipes) => {
 
 //  the events method will hold general event listeners for the site
 foodApp.events = () => {
-
+    $('.recipe-search').on('submit', function(e) {
+        e.preventDefault();
+        const ingredients = $('input[type=text]').val();
+        const courseType = $('input[name=course-type]:checked').val();
+        const cuisineType = $('input[name=cuisine-type]:checked').map(function() {
+            return $(this).val();
+        }).get().join('');
+        const dietary = $('input[name=dietary-restrictions]:checked').val()
+        foodApp.getAllRecipes(ingredients, courseType, cuisineType, dietary);
+        $('form').trigger('reset');
+    });
 }
 
 //  the init method initializes all the necessary methods when the page loads
 foodApp.init = () => {
-    foodApp.getAllRecipes('ground beef', '', '&allowedCuisine[]=cuisine^cuisine-italian&allowedCuisine[]=cuisine^cuisine-mexican&allowedCuisine[]=cuisine^cuisine-cuban');
+    foodApp.events();
 };
 
 //  document.ready to call the init method once the page is finished loading
