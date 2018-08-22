@@ -1,6 +1,46 @@
 @import 'setup';
 
-.container {
-	max-width: 900px;
+// .container {
+// 	max-width: 900px;
+// 	margin: 0 auto;
+// }
+
+body {
+	// margin: 0 auto;
+}
+
+.wrapper {
+	max-width: 1140px;
 	margin: 0 auto;
 }
+
+.main-menu {
+	display: flex;
+	justify-content: space-around;
+	padding: 10px 0;
+}
+
+ul {
+	list-style-type: none;
+}
+
+.sub-menu {
+	padding-left: 0;
+	display: none;
+}
+
+.main-menu li:hover .sub-menu {
+	display: block;
+}
+
+// input[type=radio], input[type=checkbox] {
+// 	display: none;
+// }
+
+
+.cuisine-type:checked ~ input {
+	background-color: blue;
+} 
+
+#pizza-small:checked ~ .small-pizza {
+  background-image: url("assets/small-pizza-color.svg"); }
