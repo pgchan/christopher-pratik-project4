@@ -49,8 +49,8 @@ foodApp.getSingleRecipe = (recipeID) => {
         if (result.attributes.cuisine) {
             cuisine = result.attributes.cuisine.join(', ');
         }
-        const showRecipe = `<div>
-        <img src='${result.images[0].hostedLargeUrl}'>
+        const showRecipe = `<div class="recipe-container">
+        <div class="img-container"><img src='${result.images[0].hostedLargeUrl}'></div>
         <h2>${result.name}</h2>
         <h3>Total Time to Prepare: ${result.totalTime}</h3>
         <h3>Number of Servings: ${result.numberOfServings}</h3>
