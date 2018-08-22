@@ -25,7 +25,7 @@ foodApp.getAllRecipes = (ingredients, courseType, cuisineType, dietary) => {
         dataType: 'json',
         data: {
             q: ingredients,
-            maxResult: 20,
+            maxResult: 21,
             start: 0,
         }
     })
@@ -44,21 +44,23 @@ foodApp.getSingleRecipe = (recipeID) => {
     .then((result) => {
         foodApp.recipeList.push(result);
         console.log(result)
-        const courses = result.attributes.course.join(', ');
-        let cuisine = "";
-        if (result.attributes.cuisine) {
-            cuisine = result.attributes.cuisine.join(', ');
+        let courses = "";
+        if(result.attributes.course) {
+            courses = result.attributes.course.join(', ')
         }
-        const showRecipe = `<div>
-        <img src='${result.images[0].hostedLargeUrl}'>
+        let cuisines = "";
+        if (result.attributes.cuisine) {
+            cuisines = result.attributes.cuisine.join(', ');
+        }
+        const showRecipe = `<div class="recipe-container">
+        <div class="img-container"><img src='${result.images[0].hostedLargeUrl}'></div>
         <h2>${result.name}</h2>
         <h3>Total Time to Prepare: ${result.totalTime}</h3>
         <h3>Number of Servings: ${result.numberOfServings}</h3>
         <h3>Course Types: ${courses}</h3>
-        <h3>Cuisine Types: ${cuisine}</h3>
+        <h3>Cuisine Types: ${cuisines}</h3>
         </div>`
         $('.recipeList').append(showRecipe);
-        //  can use a for in loop to go through the object
     });
 }
 
@@ -69,15 +71,6 @@ foodApp.displayRecipes = (recipes) => {
         foodApp.getSingleRecipe(item.id);
     });
 }
-
-//  values to grab when displaying recipe to the page:
-//  .images.hostedLargeUrl
-//  .name
-//  .source.sourceRecipeUrl
-//  .totalTime
-//  .numberOfServings
-//  .attributes.course
-//  .attributes.cuisine
 
 //  the events method will hold general event listeners for the site
 foodApp.events = () => {
@@ -167,5 +160,14 @@ For example: http://api.yummly.com/v1/api/recipes?_app_id=YOUR_ID&_app_key=YOUR_
 //  course^course-Snacks
 //  course^course-Lunch
 
-//  Pratik current task: starting on form layout for searching
-//  Chris current task - work on getting data from API and filtering
+//  values to grab when displaying recipe to the page:
+//  .images.hostedLargeUrl
+//  .name
+//  .source.sourceRecipeUrl
+//  .totalTime
+//  .numberOfServings
+//  .attributes.course
+//  .attributes.cuisine
+
+//  Pratik current task: styling search form / display area
+//  Chris current task - pagination
