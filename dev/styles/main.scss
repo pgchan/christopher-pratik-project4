@@ -1,12 +1,6 @@
 @import 'setup';
 
-// .container {
-// 	max-width: 900px;
-// 	margin: 0 auto;
-// }
-
 body {
-	// margin: 0 auto
 	box-sizing: border-box;
 }
 
@@ -30,7 +24,20 @@ nav {
 	display: flex;
 	justify-content: space-around;
 	padding: 10px 1%;
+}
 
+.sub-menu input:hover + label {
+	background: yellow;
+}
+
+.main-menu li:hover .sub-menu {
+	display: block;
+}
+
+label {
+	background: lightgrey;
+	display: block;
+	padding: 4%;
 }
 
 ul {
@@ -43,9 +50,8 @@ ul {
 	position: absolute;
 }
 
-.main-menu li:hover .sub-menu {
-	display: block;
-	background: lightgrey;
+.submenu label:checked {
+	background: grey;
 }
 
 .search-bar {
@@ -53,7 +59,9 @@ ul {
 }
 
 .search-bar input {
-	width: 90%
+	width: 90%;
+	border: none;
+	padding: 2px;
 }
 
 .course-type, 
@@ -62,22 +70,18 @@ ul {
 	flex: 1;
 }
 
-
 .sub-menu li {
-	padding: 3%;
     border: 1px solid black;
 }
 
+input[type=radio], input[type=checkbox] {
+	display: none;
+}
 
-
-// input[type=radio], input[type=checkbox] {
-// 	display: none;
-// }
-
-
-.cuisine-type:checked ~ input {
-	background-color: blue;
-} 
+input[type="radio"]:checked + label,
+input[type="checkbox"]:checked + label {
+    background: brown;
+}
 
 .recipe-list {
 	margin-top: 60px;
@@ -91,7 +95,12 @@ ul {
 
 
 .recipe-container{
- flex: 0 1 calc(33% - 20px)
+	flex: 0 1 calc(33% - 20px);
+	text-decoration: none;
+}
+
+.recipe-container a {
+	text-decoration: none;
 }
 
 .img-container {
@@ -102,4 +111,3 @@ ul {
 .results-count-container {
 	flex-basis: 100%;
 }
-
