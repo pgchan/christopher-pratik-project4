@@ -8,13 +8,13 @@
 //  The recipes will be clickable to take them to a full view of them
 //  The recipes will be opened in a new tab
 
+//  namespace for the project
 const foodApp = {};
 
 foodApp.apiID = '?_app_id=71ec3e04'
 foodApp.apiKey = '&_app_key=cc1fd4f6ce167c1198febd162fea8392';
 foodApp.allRecipiesApiURL = `http://api.yummly.com/v1/api/recipes${foodApp.apiID}`;
 foodApp.singleRecipeApiURL = 'http://api.yummly.com/v1/api/recipe/';
-// foodApp.recipeList = [];
 foodApp.recipePages = 0;
 foodApp.storedSearchIngredients = '';
 foodApp.storedSearchCourse = '',
@@ -43,15 +43,24 @@ foodApp.getAllRecipes = (ingredients, courseType, cuisineType, dietary) => {
 
 //  the displayRecipes method takes the recipes and breaks them down to be displayed on screen
 foodApp.displayRecipes = (recipes) => {
-    $('.recipeList').empty();
-    $('.show-more-container').empty();
+    console.log(foodApp.recipePages);
+    $('.recipe-list').empty();
+    $('.page-results-container').empty();
+    const resultsCount = `<div class="results-count-container">
+    <h3>Recipes Gathered: ${foodApp.totalResultCount}</h3>
+    </div>`;
+    $('.recipe-list').append(resultsCount);
     recipes.forEach((item) => {
         foodApp.getSingleRecipe(item.id);
     });
+    if(foodApp.recipePages >= 21) {
+        const showPreviousButton = `<button class="show-previous">Show Previous Results</button>`;
+        $('.page-results-container').append(showPreviousButton);
+    }
     //  only show the show more button if there are still more results to show
     if(foodApp.recipePages < (foodApp.totalResultCount - 21)) {
         const showMoreButton = `<button class="show-more">Show More Results</button>`;
-        $('.show-more-container').append(showMoreButton);
+        $('.page-results-container').append(showMoreButton);
     }
 }
 
@@ -63,7 +72,6 @@ foodApp.getSingleRecipe = (recipeID) => {
         dataType: 'json',
     })
     .then((result) => {
-        // foodApp.recipeList.push(result);
         let courses = "---";
         if(result.attributes.course) {
             courses = result.attributes.course.join(', ')
@@ -81,7 +89,7 @@ foodApp.getSingleRecipe = (recipeID) => {
         <h3>Course Types: ${courses}</h3>
         <h3>Cuisine Types: ${cuisines}</h3>
         </div>`
-        $('.recipeList').append(showRecipe);
+        $('.recipe-list').append(showRecipe);
     });
 }
 
@@ -103,6 +111,10 @@ foodApp.events = () => {
     });
 
     //  event listener for the show more button to show more recipe results
+    $('body').on('click', '.show-previous', function() {
+        foodApp.recipePages-=21;
+        foodApp.getAllRecipes(foodApp.storedSearchIngredients, foodApp.storedSearchCourse, foodApp.storedSearchCuisine, foodApp.storedSearchDietary)
+    });
     $('body').on('click', '.show-more', function() {
         foodApp.recipePages+=21;
         foodApp.getAllRecipes(foodApp.storedSearchIngredients, foodApp.storedSearchCourse, foodApp.storedSearchCuisine, foodApp.storedSearchDietary)
