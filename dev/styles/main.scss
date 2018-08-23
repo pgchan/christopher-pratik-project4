@@ -13,6 +13,7 @@ body {
 .wrapper {
 	max-width: 1140px;
 	margin: 0 auto;
+	padding: 0 1%;
 }
 
 nav {
@@ -28,7 +29,7 @@ nav {
 .main-menu {
 	display: flex;
 	justify-content: space-around;
-	padding: 10px 0;
+	padding: 10px 1%;
 
 }
 
@@ -47,6 +48,28 @@ ul {
 	background: lightgrey;
 }
 
+.search-bar {
+	flex: 2;
+}
+
+.search-bar input {
+	width: 90%
+}
+
+.course-type, 
+.cuisine-type, 
+.dietary-restrictions {
+	flex: 1;
+}
+
+
+.sub-menu li {
+	padding: 3%;
+    border: 1px solid black;
+}
+
+
+
 // input[type=radio], input[type=checkbox] {
 // 	display: none;
 // }
@@ -60,7 +83,7 @@ ul {
 	margin-top: 60px;
 	display: flex;
 	flex-wrap: wrap;
-	justify-content: space-around;
+	justify-content: space-between;
 }
 
 // goes in div class 
