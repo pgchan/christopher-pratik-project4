@@ -14,7 +14,13 @@ foodApp.apiID = '?_app_id=71ec3e04'
 foodApp.apiKey = '&_app_key=cc1fd4f6ce167c1198febd162fea8392';
 foodApp.allRecipiesApiURL = `http://api.yummly.com/v1/api/recipes${foodApp.apiID}`;
 foodApp.singleRecipeApiURL = 'http://api.yummly.com/v1/api/recipe/';
-foodApp.recipeList = [];
+// foodApp.recipeList = [];
+foodApp.recipePages = 0;
+foodApp.storedSearchIngredients = '';
+foodApp.storedSearchCourse = '',
+foodApp.storedSearchCuisine = '';
+foodApp.storedSearchDietary = '';
+foodApp.totalResultCount = 0;
 
 //  the getAllRecipes method takes in the parameters from the search form and gets the matching data from the API
 foodApp.getAllRecipes = (ingredients, courseType, cuisineType, dietary) => {
@@ -24,13 +30,29 @@ foodApp.getAllRecipes = (ingredients, courseType, cuisineType, dietary) => {
         dataType: 'json',
         data: {
             q: ingredients,
+            requirePictures: true,
             maxResult: 21,
-            start: 0,
+            start: foodApp.recipePages,
         }
     })
     .then((result) => {
+        foodApp.totalResultCount = result.totalMatchCount;
         foodApp.displayRecipes(result.matches);
     });
+}
+
+//  the displayRecipes method takes the recipes and breaks them down to be displayed on screen
+foodApp.displayRecipes = (recipes) => {
+    $('.recipeList').empty();
+    $('.show-more-container').empty();
+    recipes.forEach((item) => {
+        foodApp.getSingleRecipe(item.id);
+    });
+    //  only show the show more button if there are still more results to show
+    if(foodApp.recipePages < (foodApp.totalResultCount - 21)) {
+        const showMoreButton = `<button class="show-more">Show More Results</button>`;
+        $('.show-more-container').append(showMoreButton);
+    }
 }
 
 //  the getSingleRecipe method takes in a recipeID and pulls the info for that specific recipe
@@ -41,19 +63,19 @@ foodApp.getSingleRecipe = (recipeID) => {
         dataType: 'json',
     })
     .then((result) => {
-        foodApp.recipeList.push(result);
-        console.log(result)
-        let courses = "";
+        // foodApp.recipeList.push(result);
+        let courses = "---";
         if(result.attributes.course) {
             courses = result.attributes.course.join(', ')
         }
-        let cuisines = "";
+        let cuisines = "---";
         if (result.attributes.cuisine) {
             cuisines = result.attributes.cuisine.join(', ');
         }
         const showRecipe = `<div class="recipe-container">
-        <div class="img-container"><img src='${result.images[0].hostedLargeUrl}'></div>
-        <h2>${result.name}</h2>
+        <a href="${result.source.sourceRecipeUrl}" target="top"><div class="img-container"><img src='${result.images[0].hostedLargeUrl}'></div>
+        <h2>${result.name}</h2><a/>
+        <h3>Rating: ${result.rating} / 5</h3>
         <h3>Total Time to Prepare: ${result.totalTime}</h3>
         <h3>Number of Servings: ${result.numberOfServings}</h3>
         <h3>Course Types: ${courses}</h3>
@@ -63,26 +85,27 @@ foodApp.getSingleRecipe = (recipeID) => {
     });
 }
 
-//  the displayRecipes method takes the recipes and breaks them down to be displayed on screen
-foodApp.displayRecipes = (recipes) => {
-    $('.recipeList').empty();
-    recipes.forEach((item) => {
-        foodApp.getSingleRecipe(item.id);
-    });
-}
-
 //  the events method will hold general event listeners for the site
 foodApp.events = () => {
     $('.recipe-search').on('submit', function(e) {
         e.preventDefault();
-        const ingredients = $('input[type=text]').val();
-        const courseType = $('input[name=course-type]:checked').val();
-        const cuisineType = $('input[name=cuisine-type]:checked').map(function() {
+        //  store the results from the form to be used later for pagination
+        foodApp.storedSearchIngredients = $('input[type=text]').val();
+        foodApp.storedSearchCourse = $('input[name=course-type]:checked').val();
+        foodApp.storedSearchCuisine = $('input[name=cuisine-type]:checked').map(function() {
             return $(this).val();
         }).get().join('');
-        const dietary = $('input[name=dietary-restrictions]:checked').val()
-        foodApp.getAllRecipes(ingredients, courseType, cuisineType, dietary);
+        foodApp.storedSearchDietary = $('input[name=dietary-restrictions]:checked').val();
+        //  send the search results to the getAllRecipes method to pull the data from the API
+        foodApp.getAllRecipes(foodApp.storedSearchIngredients, foodApp.storedSearchCourse, foodApp.storedSearchCuisine, foodApp.storedSearchDietary);
+        //  reset the form after it has been submitted
         $('form').trigger('reset');
+    });
+
+    //  event listener for the show more button to show more recipe results
+    $('body').on('click', '.show-more', function() {
+        foodApp.recipePages+=21;
+        foodApp.getAllRecipes(foodApp.storedSearchIngredients, foodApp.storedSearchCourse, foodApp.storedSearchCuisine, foodApp.storedSearchDietary)
     });
 }
 
