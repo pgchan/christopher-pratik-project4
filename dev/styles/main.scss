@@ -79,7 +79,7 @@ ul {
 	background-color: blue;
 } 
 
-.recipeList {
+.recipe-list {
 	margin-top: 60px;
 	display: flex;
 	flex-wrap: wrap;
@@ -97,5 +97,9 @@ ul {
 .img-container {
 	width: 100%;
 	& img { width: 100%;}
+}
+
+.results-count-container {
+	flex-basis: 100%;
 }
 
