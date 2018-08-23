@@ -31,34 +31,50 @@ foodApp.getAllRecipes = (ingredients, courseType, cuisineType, dietary) => {
         data: {
             q: ingredients,
             requirePictures: true,
-            maxResult: 21,
+            maxResult: 1008,
             start: foodApp.recipePages,
         }
     })
     .then((result) => {
+        console.log(result);
+        result.matches.forEach((res) => {
+            foodApp.storedResults.push(res);
+        });
+        console.log(foodApp.storedResults);
         foodApp.totalResultCount = result.totalMatchCount;
-        foodApp.displayRecipes(result.matches);
+        foodApp.splitRecipes();
+        console.log(foodApp.pagedResults);
+        foodApp.displayRecipes(foodApp.pagedResults[foodApp.recipePages]);
     });
+}
+
+foodApp.splitRecipes = () => {
+    for (let i = 0; i < foodApp.storedResults.length; i += 21) {
+        const block = foodApp.storedResults.slice(i, i+21);
+        // Do something if you want with the group
+        foodApp.pagedResults.push(block);
+    }   
 }
 
 //  the displayRecipes method takes the recipes and breaks them down to be displayed on screen
 foodApp.displayRecipes = (recipes) => {
-    console.log(foodApp.recipePages);
     $('.recipe-list').empty();
     $('.page-results-container').empty();
     const resultsCount = `<div class="results-count-container">
-    <h3>Recipes Gathered: ${foodApp.totalResultCount}</h3>
+    <h3>Recipes Gathered: ${foodApp.storedResults.length}</h3>
     </div>`;
     $('.recipe-list').append(resultsCount);
     recipes.forEach((item) => {
         foodApp.getSingleRecipe(item.id);
     });
-    if(foodApp.recipePages >= 21) {
+    console.log(`recipe pages: ${foodApp.recipePages} : pagedResults length${foodApp.pagedResults.length}`)
+    //  only show the show previous button if there are results to go back to
+    if(foodApp.recipePages > 0) {
         const showPreviousButton = `<button class="show-previous">Show Previous Results</button>`;
         $('.page-results-container').append(showPreviousButton);
     }
     //  only show the show more button if there are still more results to show
-    if(foodApp.recipePages < (foodApp.totalResultCount - 21)) {
+    if(foodApp.recipePages <= ((foodApp.pagedResults.length) - 2)) {
         const showMoreButton = `<button class="show-more">Show More Results</button>`;
         $('.page-results-container').append(showMoreButton);
     }
@@ -80,15 +96,16 @@ foodApp.getSingleRecipe = (recipeID) => {
         if (result.attributes.cuisine) {
             cuisines = result.attributes.cuisine.join(', ');
         }
-        const showRecipe = `<div class="recipe-container">
-        <a href="${result.source.sourceRecipeUrl}" target="top"><div class="img-container"><img src='${result.images[0].hostedLargeUrl}'></div>
-        <h2>${result.name}</h2><a/>
+        //  create the HTML elements to write the recipe to the DOM
+        const showRecipe = `<div class="recipe-container"><a href="${result.source.sourceRecipeUrl}" target="top">
+        <div class="img-container"><img src='${result.images[0].hostedLargeUrl}'></div>
+        <h2>${result.name}</h2>
         <h3>Rating: ${result.rating} / 5</h3>
         <h3>Total Time to Prepare: ${result.totalTime}</h3>
         <h3>Number of Servings: ${result.numberOfServings}</h3>
         <h3>Course Types: ${courses}</h3>
         <h3>Cuisine Types: ${cuisines}</h3>
-        </div>`
+        </a></div>`
         $('.recipe-list').append(showRecipe);
     });
 }
@@ -96,6 +113,9 @@ foodApp.getSingleRecipe = (recipeID) => {
 //  the events method will hold general event listeners for the site
 foodApp.events = () => {
     $('.recipe-search').on('submit', function(e) {
+        foodApp.storedResults = [];
+        foodApp.pagedResults = [];
+        foodApp.recipePages = 0;
         e.preventDefault();
         //  store the results from the form to be used later for pagination
         foodApp.storedSearchIngredients = $('input[type=text]').val();
@@ -110,14 +130,15 @@ foodApp.events = () => {
         $('form').trigger('reset');
     });
 
-    //  event listener for the show more button to show more recipe results
+    //  event listener for the show previous button to show previous recipe results
     $('body').on('click', '.show-previous', function() {
-        foodApp.recipePages-=21;
-        foodApp.getAllRecipes(foodApp.storedSearchIngredients, foodApp.storedSearchCourse, foodApp.storedSearchCuisine, foodApp.storedSearchDietary)
+        foodApp.recipePages--;
+        foodApp.displayRecipes(foodApp.pagedResults[foodApp.recipePages]);
     });
+    //  event listener for the show more button to show more recipe results
     $('body').on('click', '.show-more', function() {
-        foodApp.recipePages+=21;
-        foodApp.getAllRecipes(foodApp.storedSearchIngredients, foodApp.storedSearchCourse, foodApp.storedSearchCuisine, foodApp.storedSearchDietary)
+        foodApp.recipePages++;
+        foodApp.displayRecipes(foodApp.pagedResults[foodApp.recipePages]);
     });
 }
 
