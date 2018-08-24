@@ -1,12 +1,12 @@
 //  Customer enters their required search parameters (ingredients, course type, cusisine type, dietary restrictions)
-//  Example of a search for chicken and broccoli / Main dish / Italian / No dietary restriction
-//  Do an API call for all recipes with chicken and broccoli
-//  Then filter the results based on the other criteria - starting with course type - then cuisine type - then dietary restrcitions
+    //  Example of a search for chicken and broccoli / Main dish / Italian / No dietary restriction
+        //  Do an API call for all recipes with chicken and broccoli
+        //  Then filter the results based on the other criteria - starting with course type - then cuisine type - then dietary restrcitions
 //  The data is pulled from the API and displayed onto the page in a list
-//  The filtered results will then be broken down into individual recipes - displaying an image of the dish, the name of the dish and a  description of it
-//  need to store recipe id from each filtered result and do a separate pull to get the info from there
+    //  The filtered results will then be broken down into individual recipes - displaying an image of the dish, the name of the dish and a  description of it
+    //  need to store recipe id from each filtered result and do a separate pull to get the info from there
 //  The recipes will be clickable to take them to a full view of them
-//  The recipes will be opened in a new tab
+    //  The recipes will be opened in a new tab
 
 //  namespace for the project
 const foodApp = {};
@@ -15,14 +15,9 @@ foodApp.apiID = '?_app_id=71ec3e04'
 foodApp.apiKey = '&_app_key=cc1fd4f6ce167c1198febd162fea8392';
 foodApp.allRecipiesApiURL = `http://api.yummly.com/v1/api/recipes${foodApp.apiID}`;
 foodApp.singleRecipeApiURL = 'http://api.yummly.com/v1/api/recipe/';
-foodApp.recipePages = 0;
-foodApp.storedSearchIngredients = '';
-foodApp.storedSearchCourse = '',
-foodApp.storedSearchCuisine = '';
-foodApp.storedSearchDietary = '';
 foodApp.totalResultCount = 0;
 
-//  the getAllRecipes method takes in the parameters from the search form and gets the matching data from the API
+//  the getAllRecipes method takes in the parameters from the search form and gets the matching data from the API. The results are then stored in the storedResults array
 foodApp.getAllRecipes = (ingredients, courseType, cuisineType, dietary) => {
     $.ajax ({
         url: `${foodApp.allRecipiesApiURL}${foodApp.apiKey}${courseType}${cuisineType}${dietary}`,
@@ -36,38 +31,36 @@ foodApp.getAllRecipes = (ingredients, courseType, cuisineType, dietary) => {
         }
     })
     .then((result) => {
-        console.log(result);
         result.matches.forEach((res) => {
             foodApp.storedResults.push(res);
         });
-        console.log(foodApp.storedResults);
         foodApp.totalResultCount = result.totalMatchCount;
         foodApp.splitRecipes();
-        console.log(foodApp.pagedResults);
         foodApp.displayRecipes(foodApp.pagedResults[foodApp.recipePages]);
     });
 }
 
+//  the splitRecipes method splits the intially stored results into an array of results pages, with 21 entries on each
 foodApp.splitRecipes = () => {
     for (let i = 0; i < foodApp.storedResults.length; i += 21) {
         const block = foodApp.storedResults.slice(i, i+21);
-        // Do something if you want with the group
         foodApp.pagedResults.push(block);
     }   
 }
 
 //  the displayRecipes method takes the recipes and breaks them down to be displayed on screen
 foodApp.displayRecipes = (recipes) => {
+    //  clear the results from the page as well as any displaying buttons
     $('.recipe-list').empty();
     $('.page-results-container').empty();
     const resultsCount = `<div class="results-count-container">
     <h3>Recipes Gathered: ${foodApp.storedResults.length}</h3>
     </div>`;
     $('.recipe-list').append(resultsCount);
+    //  loop through the array for the current page and grab the individual recipes info
     recipes.forEach((item) => {
         foodApp.getSingleRecipe(item.id);
     });
-    console.log(`recipe pages: ${foodApp.recipePages} : pagedResults length${foodApp.pagedResults.length}`)
     //  only show the show previous button if there are results to go back to
     if(foodApp.recipePages > 0) {
         const showPreviousButton = `<button class="show-previous">Show Previous Results</button>`;
@@ -88,6 +81,7 @@ foodApp.getSingleRecipe = (recipeID) => {
         dataType: 'json',
     })
     .then((result) => {
+        //  format the returned courses and cuisine attributes for the page
         let courses = "---";
         if(result.attributes.course) {
             courses = result.attributes.course.join(', ')
@@ -96,8 +90,8 @@ foodApp.getSingleRecipe = (recipeID) => {
         if (result.attributes.cuisine) {
             cuisines = result.attributes.cuisine.join(', ');
         }
-        //  create the HTML elements to write the recipe to the DOM
-        const showRecipe = `<div class="recipe-container"><a href="${result.source.sourceRecipeUrl}" target="top">
+        //  create the HTML elements to write the recipe to the DOM and append it to the recipe-list div
+        const showRecipe = `<a href="${result.source.sourceRecipeUrl}" target="top"><div class="recipe-container">
         <div class="img-container"><img src='${result.images[0].hostedLargeUrl}'></div>
         <h2>${result.name}</h2>
         <h3>Rating: ${result.rating} / 5</h3>
@@ -105,7 +99,7 @@ foodApp.getSingleRecipe = (recipeID) => {
         <h3>Number of Servings: ${result.numberOfServings}</h3>
         <h3>Course Types: ${courses}</h3>
         <h3>Cuisine Types: ${cuisines}</h3>
-        </a></div>`
+        </div></a>`
         $('.recipe-list').append(showRecipe);
     });
 }
@@ -118,18 +112,19 @@ foodApp.events = () => {
         foodApp.recipePages = 0;
         e.preventDefault();
         //  store the results from the form to be used later for pagination
-        foodApp.storedSearchIngredients = $('input[type=text]').val();
-        foodApp.storedSearchCourse = $('input[name=course-type]:checked').val();
-        foodApp.storedSearchCuisine = $('input[name=cuisine-type]:checked').map(function() {
+        const ingredients = $('input[type=text]').val();
+        const courses = $('input[name=course-type]:checked').val();
+        const cuisines = $('input[name=cuisine-type]:checked').map(function() {
             return $(this).val();
         }).get().join('');
-        foodApp.storedSearchDietary = $('input[name=dietary-restrictions]:checked').val();
+        const dietary = $('input[name=dietary-restrictions]:checked').val();
         //  send the search results to the getAllRecipes method to pull the data from the API
-        foodApp.getAllRecipes(foodApp.storedSearchIngredients, foodApp.storedSearchCourse, foodApp.storedSearchCuisine, foodApp.storedSearchDietary);
-        //  reset the form after it has been submitted
-        $('form').trigger('reset');
+        foodApp.getAllRecipes(ingredients, courses, cuisines, dietary);
     });
-
+    //  event listener to clear the search form
+    $('.form-reset').on('click', function() {
+        $('.recipe-search').trigger('reset');
+    })
     //  event listener for the show previous button to show previous recipe results
     $('body').on('click', '.show-previous', function() {
         foodApp.recipePages--;
@@ -151,78 +146,3 @@ foodApp.init = () => {
 $(function() {
     foodApp.init();
 });
-
-
-
-//  Example for pagination later on
-
-
-/* maxResult, start : The maxResult and start parameters allow pagination and # of results control. By default 6 recipes are returned by the search API.
-For example, if you want 10 recipes per page and want to see the second page of results, you would append &maxResult=10&start=10. Start is set to 10 versus because the numbering for results starts at 0 (versus 1).
-For example: http://api.yummly.com/v1/api/recipes?_app_id=YOUR_ID&_app_key=YOUR_APP_KEY&q=onion+soup
-&maxResult=20&start=10 */
-//  can have a variable in place of the 10 for start that would increase on each Load More button click.
-
-
-//  values for cuisines have to all be in lower case - all should start with &allowedCuisine[]=
-//  &allowedCuisine[]=cuisine^cuisine-american
-//  &allowedCuisine[]=cuisine^cuisine-kid-friendly
-//  cuisine^cuisine-italian
-//  cuisine^cuisine-asian
-//  cuisine^cuisine-mexican
-//  cuisine^cuisine-southern
-//  cuisine^cuisine-french
-//  cuisine^cuisine-southwestern
-//  cuisine^cuisine-barbecue-bbq
-//  cuisine^cuisine-indian
-//  cuisine^cuisine-chinese
-//  cuisine^cuisine-cajun
-//  cuisine^cuisine-mediterranean
-//  cuisine^cuisine-greek
-//  cuisine^cuisine-english
-//  cuisine^cuisine-spanish
-//  cuisine^cuisine-thai
-//  cuisine^cuisine-german
-//  cuisine^cuisine-moroccan
-//  cuisine^cuisine-irish
-//  cuisine^cuisine-japanese
-//  cuisine^cuisine-cuban
-//  cuisine^cuisine-hawaiian
-//  cuisine^cuisine-swedish
-//  cuisine^cuisine-hungarian
-//  cuisine^cuisine-portuguese
-
-//  values for dietary are as follows: - all should start with &allowedDiet[]=
-//  386^Vegan
-//  387^Lacto-ovo vegetarian
-//  388^Lacto vegetarian
-//  389^Ovo vegetarian
-//  390^Pescetarian
-//  403^Paleo
-
-//  values for course types are as follows: - all should start with &allowedCourse[]=
-//  course^course-Main Dishes
-//  course^course-Desserts
-//  course^course-Side Dishes
-//  course^course-Appetizers
-//  course^course-Salads
-//  course^course-Breakfast and Brunch
-//  course^course-Breads
-//  course^course-Soups
-//  course^course-Beverages
-//  course^course-Condiments and Sauces
-//  course^course-Cocktails
-//  course^course-Snacks
-//  course^course-Lunch
-
-//  values to grab when displaying recipe to the page:
-//  .images.hostedLargeUrl
-//  .name
-//  .source.sourceRecipeUrl
-//  .totalTime
-//  .numberOfServings
-//  .attributes.course
-//  .attributes.cuisine
-
-//  Pratik current task: styling search form / display area
-//  Chris current task - pagination
