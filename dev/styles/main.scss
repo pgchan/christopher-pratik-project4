@@ -46,17 +46,6 @@ body {
     /*opacity: 0.5;*/
 }
 
-
-
-
-
-
-
-
-
-
-
-
 nav {
 	// display: block;
 	display: none;
@@ -155,28 +144,19 @@ input[type="checkbox"]:checked + label {
 
 
 
-.recipe-container{
+a {
 	flex: 0 1 calc(33% - 20px);
 	text-decoration: none;
 	border: 1px solid black;
 	margin-bottom: 30px;
 }
 
-
-.recipe-container a {
+.recipe-container h2,
+.recipe-container h3 {
 	color: black;
 	text-decoration: none;
 	&:active {color: black;}
 	&:visited {color: black;}
-}
-
-
-
-
-
-
-.recipe-container h2,
-.recipe-container h3 {
 	margin: 0;
 	padding: 10px;
 }

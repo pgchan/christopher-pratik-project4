@@ -26,11 +26,14 @@ foodApp.getAllRecipes = (ingredients, courseType, cuisineType, dietary) => {
         data: {
             q: ingredients,
             requirePictures: true,
-            maxResult: 1008,
+            maxResult: 504,
             start: foodApp.recipePages,
         }
     })
     .then((result) => {
+        foodApp.storedResults = [];
+        foodApp.pagedResults = [];
+        foodApp.recipePages = 0;
         result.matches.forEach((res) => {
             foodApp.storedResults.push(res);
         });
@@ -106,10 +109,15 @@ foodApp.getSingleRecipe = (recipeID) => {
 
 //  the events method will hold general event listeners for the site
 foodApp.events = () => {
+    $('.initial-search').on('submit', function(e) {
+        e.preventDefault();
+        const ingredients = $('input[type=text]').val();
+        $('.main-welcome-page').hide();
+        $('nav').show();
+        $('.recipe-search-box').val($('.initial-search-box').val());
+        foodApp.getAllRecipes(ingredients, '', '', '');
+    });
     $('.recipe-search').on('submit', function(e) {
-        foodApp.storedResults = [];
-        foodApp.pagedResults = [];
-        foodApp.recipePages = 0;
         e.preventDefault();
         //  store the results from the form to be used later for pagination
         const ingredients = $('input[type=text]').val();
@@ -139,6 +147,8 @@ foodApp.events = () => {
 
 //  the init method initializes all the necessary methods when the page loads
 foodApp.init = () => {
+    $('.recipe-search').trigger('reset');
+    $('.initial-search').trigger('reset');
     foodApp.events();
 };
 
