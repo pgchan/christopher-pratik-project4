@@ -10,17 +10,21 @@ body {
 	padding: 0 1%;
 }
 
-
 .main-welcome-page {
-	height: 100vh;
+	width: 100%;
+	height: 100%;
 }
 
-.video {
-    position: fixed;
-    right: 0;
-    bottom: 0;
-    min-width: 100%; 
-    min-height: 100%;
+#myVideo {
+	position: fixed;
+	top: 50%;
+	left: 50%;
+	min-width: 100%;
+	min-height: 100%;
+	width: auto;
+	height: auto;
+	z-index: -100;
+	transform: translate(-50%, -50%);
 }
 
 /* Add some content at the bottom of the video/page */
@@ -32,29 +36,53 @@ body {
     width: 50%;
     transform: translate(-50%, -50%);
     z-index: 3;
-    height: 50px;
+	height: 50px;
+	border-radius: 20px;
+	box-shadow: 5px 5px 5px 3px rgb(25, 25, 25)
 }
 
 .main-welcome-page .overlay {
-    height: 100%;
-    width: 100%;
-    position: absolute;
-    top: 0px;
-    left: 0px;
+    position: fixed;
+    top: 0;
+	left: 0;
+	bottom: 0;
+	right: 0;
     z-index: 2;
     background: rgba(0, 0, 0, 0.5);
-    /*opacity: 0.5;*/
 }
 
+.initial-search {
+	width: 100%;
+	height: 50px;
+	position: relative;
+	& i {
+		position: absolute;
+		right: 10px;
+		top: 50%;
+		transform: translate(-50%, -50%);
+		color: #999999;
+	}
+}
+
+.initial-search-box {
+	width: 100%;
+	height: 50px;
+	border: none;
+	border-radius: 20px;
+	padding: 0 15px;
+	color: #333333;
+}
+
+
 nav {
-	// display: block;
 	display: none;
     padding: 5px 0;
     position: fixed;
   	margin-top: 0;
     top: 0;
     width: 100%;
-    background: lightgrey;
+	background: lightgrey;
+	z-index: 10;
 }
 
 .main-menu {
@@ -126,13 +154,6 @@ input[type="checkbox"]:checked + label {
     background: brown;
 }
 
-// .cuisine-type .sub-menu {
-// 	width: 500px;
-//     display: flex;
-//     flex-wrap: wrap;
-//     justify-content: space-around;
-// }
-
 .recipe-list {
 	margin-top: 60px;
 	display: flex;
@@ -140,15 +161,15 @@ input[type="checkbox"]:checked + label {
 	justify-content: space-between;
 }
 
-// goes in div class 
-
-
-
 a {
 	flex: 0 1 calc(33% - 20px);
 	text-decoration: none;
 	border: 1px solid black;
 	margin-bottom: 30px;
+	position: relative;
+	&:hover .recipe-overlay {
+        display: flex;
+    }
 }
 
 .recipe-container h2,
@@ -168,4 +189,43 @@ a {
 
 .results-count-container {
 	flex-basis: 100%;
+}
+
+.page-results-container {
+	display: flex;
+	justify-content: space-between;
+	margin-bottom: 20px;
+}
+
+.show-button {
+	border-radius: 5px;
+	padding: 7px;
+	border: none;
+	color: #333333;
+	background-color: #DDDDDD;
+	box-shadow: 2px 2px 2px 2px #999999;
+}
+
+.recipe-overlay {
+	position: absolute;
+    display: none;
+    flex-direction: column;
+	width: 100%;
+	top: 0;
+	right: 0;
+	bottom: 0;
+	left: 0;
+	background-color: rgba(197, 102, 25, 0.95);
+	justify-content: center;
+	align-items: center;
+	color: #FFFFFF;
+    text-align: center;
+    & h3 {
+        font-size: 1.8rem;
+		width: 80%;
+		display: inline-block;
+        width: 100%;
+        position: relative;
+        margin-bottom: 50px;
+	}
 }
