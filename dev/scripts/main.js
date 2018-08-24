@@ -127,7 +127,7 @@ foodApp.events = () => {
         //  send the search results to the getAllRecipes method to pull the data from the API
         foodApp.getAllRecipes(foodApp.storedSearchIngredients, foodApp.storedSearchCourse, foodApp.storedSearchCuisine, foodApp.storedSearchDietary);
         //  reset the form after it has been submitted
-        $('form').trigger('reset');
+        // $('form').trigger('reset');
     });
 
     //  event listener for the show previous button to show previous recipe results
