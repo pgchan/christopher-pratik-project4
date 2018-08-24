@@ -11,8 +11,8 @@
 //  namespace for the project
 const foodApp = {};
 
-foodApp.apiID = '?_app_id=71ec3e04'
-foodApp.apiKey = '&_app_key=cc1fd4f6ce167c1198febd162fea8392';
+foodApp.apiID = '?_app_id=29d4e9cb'
+foodApp.apiKey = '&_app_key=3d9fe704063a8a69bdc768b960f23f6e';
 foodApp.allRecipiesApiURL = `http://api.yummly.com/v1/api/recipes${foodApp.apiID}`;
 foodApp.singleRecipeApiURL = 'http://api.yummly.com/v1/api/recipe/';
 foodApp.totalResultCount = 0;
@@ -65,6 +65,7 @@ foodApp.displayRecipes = (recipes) => {
         foodApp.getSingleRecipe(item.id);
     });
     //  only show the show previous button if there are results to go back to
+<<<<<<< HEAD
     if (foodApp.recipePages > 0) {
         const showPreviousButton = `<button class="show-previous">Show Previous Results</button>`;
         $('.page-results-container').append(showPreviousButton);
@@ -72,6 +73,15 @@ foodApp.displayRecipes = (recipes) => {
     //  only show the show more button if there are still more results to show
     if (foodApp.recipePages <= ((foodApp.pagedResults.length) - 2)) {
         const showMoreButton = `<button class="show-more">Show More Results</button>`;
+=======
+    if(foodApp.recipePages > 0) {
+        const showPreviousButton = `<button class="show-previous show-button">Show Previous Results</button>`;
+        $('.page-results-container').append(showPreviousButton);
+    }
+    //  only show the show more button if there are still more results to show
+    if(foodApp.recipePages <= ((foodApp.pagedResults.length) - 2)) {
+        const showMoreButton = `<button class="show-more show-button">Show More Results</button>`;
+>>>>>>> 36488a8967307f5a8f8db2c28aeb168e725981d5
         $('.page-results-container').append(showMoreButton);
     }
 }
@@ -102,9 +112,16 @@ foodApp.getSingleRecipe = (recipeID) => {
         <h3>Number of Servings: ${result.numberOfServings}</h3>
         <h3>Course Types: ${courses}</h3>
         <h3>Cuisine Types: ${cuisines}</h3>
+<<<<<<< HEAD
         </div></a>`
             $('.recipe-list').append(showRecipe);
         });
+=======
+        
+        </div><div class="recipe-overlay"><h3>Click here to read the full recipe</h3></div></a>`
+        $('.recipe-list').append(showRecipe);
+    });
+>>>>>>> 36488a8967307f5a8f8db2c28aeb168e725981d5
 }
 
 //  the events method will hold general event listeners for the site
