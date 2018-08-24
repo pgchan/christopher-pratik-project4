@@ -31,6 +31,9 @@ foodApp.getAllRecipes = (ingredients, courseType, cuisineType, dietary) => {
         }
     })
     .then((result) => {
+        foodApp.storedResults = [];
+        foodApp.pagedResults = [];
+        foodApp.recipePages = 0;
         result.matches.forEach((res) => {
             foodApp.storedResults.push(res);
         });
@@ -106,10 +109,14 @@ foodApp.getSingleRecipe = (recipeID) => {
 
 //  the events method will hold general event listeners for the site
 foodApp.events = () => {
+    $('.initial-search').on('submit', function(e) {
+        e.preventDefault();
+        const ingredients = $('input[type=text]').val();
+        foodApp.getAllRecipes(ingredients, '', '', '');
+        $('.main-welcome-page').hide();
+        $('.nav-form').show();
+    });
     $('.recipe-search').on('submit', function(e) {
-        foodApp.storedResults = [];
-        foodApp.pagedResults = [];
-        foodApp.recipePages = 0;
         e.preventDefault();
         //  store the results from the form to be used later for pagination
         const ingredients = $('input[type=text]').val();
