@@ -12,8 +12,8 @@
 	<nav>
 		<form action="" class="recipe-search">
 			<ul class="main-menu wrapper">
-				
-				<li class="search-bar"><input type="text" name="search" placeholder="Search for recipes/ingredients"></li>
+
+				<li class="search-bar"><input type="text" name="search" placeholder="Search for recipes/ingredients" required></li>
 
 				<li class="course-type">course type
 					<ul class="sub-menu">
@@ -219,6 +219,23 @@
 			</ul>
 		</form>
 	</nav>
+
+	<section class="main-welcome-page">
+		<video autoplay muted loop id="myVideo">
+			<source src="./assets/background.mp4" type="video/mp4">
+		</video>	
+		<div class="overlay"></div>
+		<div class="content">
+			<!-- <input type="search"> -->
+		<form action="" class="recipe-search">
+			<input type="text" name="search" placeholder="Search for recipes/ingredients" required>
+			<span><class="submit"><button>Search</button></span>
+		</form>
+
+			<!-- Use a button to pause/play the video with JavaScript -->
+			<!-- <button id="myBtn" onclick="myFunction()">Pause</button> -->
+		</div>
+	</section>
 
 	<section class="recipe-list wrapper">
 
