@@ -26,7 +26,7 @@ foodApp.getAllRecipes = (ingredients, courseType, cuisineType, dietary) => {
         data: {
             q: ingredients,
             requirePictures: true,
-            maxResult: 1008,
+            maxResult: 504,
             start: foodApp.recipePages,
         }
     })
@@ -112,9 +112,10 @@ foodApp.events = () => {
     $('.initial-search').on('submit', function(e) {
         e.preventDefault();
         const ingredients = $('input[type=text]').val();
-        foodApp.getAllRecipes(ingredients, '', '', '');
         $('.main-welcome-page').hide();
-        $('.nav-form').show();
+        $('nav').show();
+        $('.recipe-search-box').val($('.initial-search-box').val());
+        foodApp.getAllRecipes(ingredients, '', '', '');
     });
     $('.recipe-search').on('submit', function(e) {
         e.preventDefault();
@@ -146,6 +147,8 @@ foodApp.events = () => {
 
 //  the init method initializes all the necessary methods when the page loads
 foodApp.init = () => {
+    $('.recipe-search').trigger('reset');
+    $('.initial-search').trigger('reset');
     foodApp.events();
 };
 
