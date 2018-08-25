@@ -65,25 +65,26 @@ foodApp.displayRecipes = (recipes) => {
         foodApp.getSingleRecipe(item.id);
     });
     //  only show the show previous button if there are results to go back to
-<<<<<<< HEAD
     if (foodApp.recipePages > 0) {
-        const showPreviousButton = `<button class="show-previous">Show Previous Results</button>`;
-        $('.page-results-container').append(showPreviousButton);
-    }
-    //  only show the show more button if there are still more results to show
-    if (foodApp.recipePages <= ((foodApp.pagedResults.length) - 2)) {
-        const showMoreButton = `<button class="show-more">Show More Results</button>`;
-=======
-    if(foodApp.recipePages > 0) {
         const showPreviousButton = `<button class="show-previous show-button">Show Previous Results</button>`;
         $('.page-results-container').append(showPreviousButton);
     }
     //  only show the show more button if there are still more results to show
-    if(foodApp.recipePages <= ((foodApp.pagedResults.length) - 2)) {
+    if (foodApp.recipePages <= ((foodApp.pagedResults.length) - 2)) {
         const showMoreButton = `<button class="show-more show-button">Show More Results</button>`;
->>>>>>> 36488a8967307f5a8f8db2c28aeb168e725981d5
         $('.page-results-container').append(showMoreButton);
     }
+}
+
+//  the rating method converts the numerical rating (if present) and displays stars in its place
+foodApp.rating = (ratingNum) => {
+    let tempRating = '';
+    if (ratingNum) {
+        for (let i = 1; i <= ratingNum; i++) {
+            tempRating += `<span class="star"><i class="fas fa-star"></i></span>`;
+        }
+    }
+    return tempRating;
 }
 
 //  the getSingleRecipe method takes in a recipeID and pulls the info for that specific recipe
@@ -103,32 +104,28 @@ foodApp.getSingleRecipe = (recipeID) => {
             if (result.attributes.cuisine) {
                 cuisines = result.attributes.cuisine.join(', ');
             }
+            const rating = foodApp.rating(result.rating);
+            console.log(rating);
             //  create the HTML elements to write the recipe to the DOM and append it to the recipe-list div
             const showRecipe = `<a href="${result.source.sourceRecipeUrl}" target="top"><div class="recipe-container">
         <div class="img-container"><img src='${result.images[0].hostedLargeUrl}'></div>
         <h2>${result.name}</h2>
-        <h3>Rating: ${result.rating} / 5</h3>
+        <h3>Rating: ${rating}</h3>
         <h3>Total Time to Prepare: ${result.totalTime}</h3>
         <h3>Number of Servings: ${result.numberOfServings}</h3>
         <h3>Course Types: ${courses}</h3>
         <h3>Cuisine Types: ${cuisines}</h3>
-<<<<<<< HEAD
-        </div></a>`
-            $('.recipe-list').append(showRecipe);
-        });
-=======
         
         </div><div class="recipe-overlay"><h3>Click here to read the full recipe</h3></div></a>`
-        $('.recipe-list').append(showRecipe);
-    });
->>>>>>> 36488a8967307f5a8f8db2c28aeb168e725981d5
+            $('.recipe-list').append(showRecipe);
+        });
 }
 
 //  the events method will hold general event listeners for the site
 foodApp.events = () => {
     $('.initial-search').on('submit', function (e) {
         e.preventDefault();
-        const ingredients = $('input[type=text]').val();
+        const ingredients = $('.initial-search-box').val();
         $('.main-welcome-page').hide();
         $('nav').show();
         $('.recipe-search-box').val($('.initial-search-box').val());
@@ -137,7 +134,8 @@ foodApp.events = () => {
     $('.recipe-search').on('submit', function (e) {
         e.preventDefault();
         //  store the results from the form to be used later for pagination
-        const ingredients = $('input[type=text]').val();
+        const ingredients = $('.recipe-search-box').val();
+        console.log(ingredients);
         const courses = $('input[name=course-type]:checked').val();
         const cuisines = $('input[name=cuisine-type]:checked').map(function () {
             return $(this).val();

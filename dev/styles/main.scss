@@ -10,6 +10,11 @@ body {
 	padding: 0 1%;
 }
 
+input:focus,
+button:focus {
+	outline:0;
+}
+
 .main-welcome-page {
 	width: 100%;
 	height: 100%;
@@ -51,6 +56,26 @@ body {
     background: rgba(0, 0, 0, 0.5);
 }
 
+.initial-search {
+	width: 100%;
+	height: 50px;
+	position: relative;
+	& i {
+		position: absolute;
+		right: 10px;
+		top: 50%;
+		transform: translate(-50%, -50%);
+		color: #999999;
+	}
+}
+.initial-search-box {
+	width: 100%;
+	height: 50px;
+	border: none;
+	border-radius: 20px;
+	padding: 0 15px;
+	color: #333333;
+}
 
 nav {
 	display: none;
@@ -59,26 +84,30 @@ nav {
   	margin-top: 0;
     top: 0;
     width: 100%;
-	background: lightgrey;
+	background: white;
 	z-index: 10;
 }
 
 .main-menu {
-	// display: flex;
-	// justify-content: space-around;
-
 	padding: 10px 1%;
+	& li:last-child {padding: 0px; border: none;}
 }
+
+.main-menu li:last-child {padding: 0px; border: none;}
+
 
 .main-menu-options {
 	display: inline-block;
-	border: 1px solid black;
+	border-radius: 5px;
+    border: 1px solid lightgrey;
 	margin-right: 1%;
 	padding: 5px;
-}
-
-.sub-menu input:hover + label {
-	background: yellow;
+	margin-top: 13px;
+	& button {
+		padding: 5px;
+    	border-radius: 5px;
+    	background: white;
+	}
 }
 
 .main-menu li:hover .sub-menu {
@@ -106,6 +135,11 @@ ul {
 	padding-left: 0;
 	display: none;
 	position: absolute;
+	padding-top: 15px;
+}
+
+.sub-menu input:hover + label {
+	background: yellow;
 }
 
 .submenu label:checked {
@@ -119,7 +153,9 @@ ul {
 .search-bar input {
 	width: 80%;
 	border: none;
-	padding: 2px;
+	padding: 13px;
+	border-radius: 5px;
+	border: 1px solid lightgrey;
 }
 
 .course-type, 
@@ -141,8 +177,10 @@ input[type="checkbox"]:checked + label {
     background: brown;
 }
 
+// --- recipe grid --- //
+
 .recipe-list {
-	margin-top: 60px;
+	margin-top: 100px;
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: space-between;
@@ -168,6 +206,8 @@ a {
 	margin: 0;
 	padding: 10px;
 }
+
+.star {color: orange}
 
 .img-container {
 	width: 100%;
