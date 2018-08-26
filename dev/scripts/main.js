@@ -19,6 +19,10 @@ foodApp.totalResultCount = 0;
 
 //  the getAllRecipes method takes in the parameters from the search form and gets the matching data from the API. The results are then stored in the storedResults array
 foodApp.getAllRecipes = (ingredients, courseType, cuisineType, dietary) => {
+
+    // show spinner
+    $("i.fa-spinner").css('display', 'inline-block');
+
     $.ajax({
         url: `${foodApp.allRecipiesApiURL}${foodApp.apiKey}${courseType}${cuisineType}${dietary}`,
         method: 'GET',
@@ -31,6 +35,9 @@ foodApp.getAllRecipes = (ingredients, courseType, cuisineType, dietary) => {
         }
     })
         .then((result) => {
+            // hide spinner
+            $("i.fa-spinner").hide();
+
             foodApp.storedResults = [];
             foodApp.pagedResults = [];
             foodApp.recipePages = 0;
@@ -105,12 +112,12 @@ foodApp.getSingleRecipe = (recipeID) => {
                 cuisines = result.attributes.cuisine.join(', ');
             }
             const rating = foodApp.rating(result.rating);
-            console.log(rating);
+
             //  create the HTML elements to write the recipe to the DOM and append it to the recipe-list div
             const showRecipe = `<a href="${result.source.sourceRecipeUrl}" target="top"><div class="recipe-container">
         <div class="img-container"><img src='${result.images[0].hostedLargeUrl}'></div>
         <h2>${result.name}</h2>
-        <h3>Rating: ${rating}</h3>
+        <h4>Rating: ${rating}</h4>
         <h3>Total Time to Prepare: ${result.totalTime}</h3>
         <h3>Number of Servings: ${result.numberOfServings}</h3>
         <h3>Course Types: ${courses}</h3>
@@ -123,19 +130,22 @@ foodApp.getSingleRecipe = (recipeID) => {
 
 //  the events method will hold general event listeners for the site
 foodApp.events = () => {
+
     $('.initial-search').on('submit', function (e) {
         e.preventDefault();
         const ingredients = $('.initial-search-box').val();
         $('.main-welcome-page').hide();
         $('nav').show();
         $('.recipe-search-box').val($('.initial-search-box').val());
+
         foodApp.getAllRecipes(ingredients, '', '', '');
+ 
     });
-    $('.recipe-search').on('submit', function (e) {
-        e.preventDefault();
+
+    $('.submit button').on('click', function (e) {
+
         //  store the results from the form to be used later for pagination
         const ingredients = $('.recipe-search-box').val();
-        console.log(ingredients);
         const courses = $('input[name=course-type]:checked').val();
         const cuisines = $('input[name=cuisine-type]:checked').map(function () {
             return $(this).val();
@@ -143,21 +153,62 @@ foodApp.events = () => {
         const dietary = $('input[name=dietary-restrictions]:checked').val();
         //  send the search results to the getAllRecipes method to pull the data from the API
         foodApp.getAllRecipes(ingredients, courses, cuisines, dietary);
+
     });
+
     //  event listener to clear the search form
     $('.form-reset').on('click', function () {
         $('.recipe-search').trigger('reset');
     })
+
     //  event listener for the show previous button to show previous recipe results
     $('body').on('click', '.show-previous', function () {
         foodApp.recipePages--;
         foodApp.displayRecipes(foodApp.pagedResults[foodApp.recipePages]);
     });
+
     //  event listener for the show more button to show more recipe results
     $('body').on('click', '.show-more', function () {
         foodApp.recipePages++;
         foodApp.displayRecipes(foodApp.pagedResults[foodApp.recipePages]);
     });
+
+    //  event listener for showing/hiding sub-menu of only course type while hiding other sub-menus
+    $('.course-type button').on('click', function (e) {
+        $(".course-type .sub-menu").toggle();
+        $(".cuisine-type .sub-menu").hide();
+        $(".dietary-restrictions .sub-menu").hide();
+        e.preventDefault();
+    });
+
+    //  event listener for showing/hiding sub-menu of only cuisine type while hiding other sub-menus
+    $('.cuisine-type button').on('click', function(e) {     
+        $(".cuisine-type .sub-menu").toggle();
+        $(".course-type .sub-menu").hide();
+        $(".dietary-restrictions .sub-menu").hide();
+        e.preventDefault();
+    })
+
+    //  event listener for showing/hiding sub-menu of only dietary restrictions while hiding other sub-menus
+    $('.dietary-restrictions button').on('click', function(e) {
+        $(".dietary-restrictions .sub-menu").toggle();
+        $(".cuisine-type .sub-menu").hide();
+        $(".course-type .sub-menu").hide();
+        e.preventDefault();
+    })
+
+    // empty array that stores selected cuisine type
+    let selectedHolder = [];
+
+    $(".sub-menu input[type=checkbox]").on('click', function () {
+        let selectedValue = $(this).val();
+        // filters through the array and takes out cuisine types that are in the array and have been clicked on again
+        if (selectedHolder.includes(selectedValue)) {
+            selectedHolder = selectedHolder.filter(selected => selected != selectedValue);
+        } else {
+            selectedHolder.push(selectedValue);
+        }
+    });  
 }
 
 //  the init method initializes all the necessary methods when the page loads
