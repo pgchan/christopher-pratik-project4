@@ -52,8 +52,8 @@ foodApp.getAllRecipes = (ingredients, courseType, cuisineType, dietary) => {
 
 //  the splitRecipes method splits the intially stored results into an array of results pages, with 21 entries on each
 foodApp.splitRecipes = () => {
-    for (let i = 0; i < foodApp.storedResults.length; i += 21) {
-        const block = foodApp.storedResults.slice(i, i + 21);
+    for (let i = 0; i < foodApp.storedResults.length; i += 18) {
+        const block = foodApp.storedResults.slice(i, i + 18);
         foodApp.pagedResults.push(block);
     }
 }
@@ -114,16 +114,25 @@ foodApp.getSingleRecipe = (recipeID) => {
             const rating = foodApp.rating(result.rating);
 
             //  create the HTML elements to write the recipe to the DOM and append it to the recipe-list div
-            const showRecipe = `<a href="${result.source.sourceRecipeUrl}" target="top"><div class="recipe-container">
-        <div class="img-container"><img src='${result.images[0].hostedLargeUrl}'></div>
-        <h2>${result.name}</h2>
-        <h4>Rating: ${rating}</h4>
-        <h3>Total Time to Prepare: ${result.totalTime}</h3>
-        <h3>Number of Servings: ${result.numberOfServings}</h3>
-        <h3>Course Types: ${courses}</h3>
-        <h3>Cuisine Types: ${cuisines}</h3>
-        
-        </div><div class="recipe-overlay"><h3>Click here to read the full recipe</h3></div></a>`
+            const showRecipe = `
+            <a href="${result.source.sourceRecipeUrl}" target="top">
+                <div class="recipe-container">
+                    <div class="img-container">
+                        <img src='${result.images[0].hostedLargeUrl}'>
+                    </div>
+                
+                    <h2>${result.name}</h2>
+                    <h4>Rating: ${rating}</h4>
+                    <h3>Total Time to Prepare: ${result.totalTime}</h3>
+                    <h3>Number of Servings: ${result.numberOfServings}</h3>
+                    <h3>Course Types: ${courses}</h3>
+                    <h3>Cuisine Types: ${cuisines}</h3>
+                </div>
+
+                <div class="recipe-overlay">
+                    <h3>Click here to read the full recipe</h3>
+                </div>
+            </a>`
             $('.recipe-list').append(showRecipe);
         });
 }
@@ -171,6 +180,16 @@ foodApp.events = () => {
     $('body').on('click', '.show-more', function () {
         foodApp.recipePages++;
         foodApp.displayRecipes(foodApp.pagedResults[foodApp.recipePages]);
+    });
+
+    // event listener than hides all the sub-menu options by default
+    $('html').on('click', function () {
+        $(".sub-menu").hide();
+    });
+    
+    // event listener that prevents sub-menu hiding if clicked inside the main-menu-options div
+    $('.main-menu-options').on('click', function (e) {
+        e.stopPropagation();
     });
 
     //  event listener for showing/hiding sub-menu of only course type while hiding other sub-menus

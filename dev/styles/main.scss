@@ -3,6 +3,7 @@
 body {
 	box-sizing: border-box;
 	text-transform: capitalize;
+	font-size: 14px;
 }
 
 .wrapper {
@@ -60,7 +61,7 @@ i.fa-spinner {
     transform: translate(-50%, -50%);
     z-index: 3;
 	height: 50px;
-	border-radius: 20px;
+	border-radius: 5px;
 	box-shadow: 5px 5px 5px 3px rgb(25, 25, 25)
 }
 
@@ -91,14 +92,14 @@ i.fa-spinner {
 	width: 100%;
 	height: 50px;
 	border: none;
-	border-radius: 20px;
+	border-radius: 5px;
 	padding: 0 15px;
 	color: #333333;
 }
 
 nav {
 	display: none;
-    padding: 5px 0;
+    // padding: 5px 0;
     position: fixed;
   	margin-top: 0;
     top: 0;
@@ -106,28 +107,40 @@ nav {
 	background: white;
 	z-index: 10;
 	text-transform: capitalize;
+	border-bottom: 1px solid lightgrey;
 }
 
 .main-menu {
 	padding: 10px 1%;
 }
 
-.main-menu-options {
+.main-menu-search {
+	border-bottom: 1px solid lightgrey;
+    margin: 0;
+}
+
+.main-menu-options,
+.main-menu-submit {
 	display: inline-block;
 	border-radius: 5px;
 	margin-right: 1%;
-	margin-top: 13px;
+	// margin-top: 13px;
 	& button {
-		padding: 5px;
+		padding: 7px 10px;
     	border-radius: 5px;
 		background: white;
 		text-transform: capitalize;
+		border: 1px solid lightgrey;
 	}
+	& button:hover {
+		transition: 0.3s;
+    	box-shadow: 2px 1px 2px 0px #bcbcbc;
+	}
+	& input {margin-right: 7px}
 }
 
-.main-menu-options input { margin-right: 5px}
-
-.main-menu-options .submenu {
+.main-menu-options .sub-menu,
+.main-menu-submit .sub-menu {
 	font-size: 0px;
 }
 
@@ -137,7 +150,7 @@ nav {
 }
 
 label {
-	background: lightgrey;
+	cursor: pointer;
 	display: block;
 	padding: 4%;
 }
@@ -150,11 +163,15 @@ ul {
 	padding-left: 0;
 	display: none;
 	position: absolute;
-	padding-top: 15px;
-    width: 430px;
+	margin-top: 10px;
+	width: 470px;
+	padding: 10px;
 	font-size: 0;
+	border: 1px solid lightgrey;
+	border-radius: 5px;
+	background: white;
 	& li {
-		border: 1px solid black;
+		// border: 1px solid black;
 		width: 50%;
 		font-size: 1rem;
 		display: inline-block;	
@@ -170,6 +187,10 @@ ul {
 		border-radius: 5px;
 		border: 1px solid lightgrey;
 	}
+	& input:hover {
+    	transition: 0.3s;
+    	box-shadow: 2px 1px 2px 0px #bcbcbc;
+	}
 }
 
 .course-type, 
@@ -180,13 +201,14 @@ ul {
 
 .submit button {
 	background: orange;
-    color: white;
+	color: white;
+	border: 1px solid lightgrey;
 }
 
 // --- recipe grid --- //
 
 .recipe-list {
-	margin-top: 100px;
+	margin-top: 120px;
 	display: flex;
 	flex-wrap: wrap;
 	justify-content: space-between;
@@ -195,13 +217,14 @@ ul {
 a {
 	flex: 0 1 calc(33% - 20px);
 	text-decoration: none;
-	border: 1px solid black;
 	margin-bottom: 30px;
 	position: relative;
 	&:hover .recipe-overlay {
         display: flex;
     }
 }
+
+.recipe-container {padding-bottom: 15px;}
 
 .recipe-container h2,
 .recipe-container h3,
@@ -211,7 +234,7 @@ a {
 	&:active {color: black;}
 	&:visited {color: black;}
 	margin: 0;
-	padding: 5px;
+	padding: 5px 0;
 }
 
 .recipe-container h2 {    
@@ -220,7 +243,7 @@ a {
 }
 
 .recipe-container h3 {
-	padding: 5px;
+	padding: 3px 0;
 	font-weight: 500;
 }
 
@@ -270,11 +293,77 @@ a {
 	color: #FFFFFF;
     text-align: center;
     & h3 {
-        font-size: 1.8rem;
-		width: 80%;
+        font-size: 1.5rem;
+		text-transform: uppercase;
 		display: inline-block;
         width: 100%;
         position: relative;
-        margin-bottom: 50px;
+        // margin-bottom: 50px;
 	}
+}
+
+
+
+// MEDIA QUERIES //
+
+@media only screen and (max-width: 1137px) {
+	.search-bar {padding: 0;}
+}
+
+@media only screen and (max-width: 850px) {
+	.main-menu-options,
+	.main-menu-submit {
+		margin-left: 1%;}
+
+	.recipe-list {justify-content: space-around;}
+	a {flex: 0 1 calc(50% - 22px);}
+	.main-menu-buttons {
+		display: flex;
+	}
+	.main-menu-options button,
+	.main-menu-submit button {width: 100%;}
+
+	.search-bar input {width: 100%}
+	.page-results-container {
+		margin-right: 1%;
+		margin-left: 1%;
+	}
+	.sub-menu {
+		width: 250px;
+		& li {width: 100%}
+	}
+	.results-count-container {padding-left: 2%}
+}
+
+@media only screen and (max-width: 555px) {
+	.search-bar {
+		width: 100%;
+		& input {width: 100%}
+	}
+	.main-menu {
+		display: flex;
+		flex-wrap: wrap;
+	}
+	.main-menu-options,
+	.main-menu-submit {
+		flex-basis: 48%;
+		& button {
+			width: 100%;
+			margin-bottom: 10px;
+		}
+	}
+	.recipe-list {margin-top: 170px}
+
+	a {
+		flex-basis: 100%;
+		margin: 5% 10%;
+	}
+
+	.page-results-container {
+		margin-right: 9%;
+    	margin-left: 10%;
+	}
+
+	.results-count-container {padding-left: 10%;}
+
 }
