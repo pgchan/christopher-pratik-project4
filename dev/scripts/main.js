@@ -1,13 +1,3 @@
-//  Customer enters their required search parameters (ingredients, course type, cusisine type, dietary restrictions)
-//  Example of a search for chicken and broccoli / Main dish / Italian / No dietary restriction
-//  Do an API call for all recipes with chicken and broccoli
-//  Then filter the results based on the other criteria - starting with course type - then cuisine type - then dietary restrcitions
-//  The data is pulled from the API and displayed onto the page in a list
-//  The filtered results will then be broken down into individual recipes - displaying an image of the dish, the name of the dish and a  description of it
-//  need to store recipe id from each filtered result and do a separate pull to get the info from there
-//  The recipes will be clickable to take them to a full view of them
-//  The recipes will be opened in a new tab
-
 //  namespace for the project
 const foodApp = {};
 
@@ -21,6 +11,7 @@ foodApp.totalResultCount = 0;
 foodApp.getAllRecipes = (ingredients, courseType, cuisineType, dietary) => {
 
     // show spinner
+    $(".spinner-overlay").show();
     $("i.fa-spinner").css('display', 'inline-block');
 
     $.ajax({
@@ -37,6 +28,7 @@ foodApp.getAllRecipes = (ingredients, courseType, cuisineType, dietary) => {
         .then((result) => {
             // hide spinner
             $("i.fa-spinner").hide();
+            $(".spinner-overlay").hide();
 
             foodApp.storedResults = [];
             foodApp.pagedResults = [];
@@ -81,6 +73,8 @@ foodApp.displayRecipes = (recipes) => {
         const showMoreButton = `<button class="show-more show-button">Show More Results</button>`;
         $('.page-results-container').append(showMoreButton);
     }
+    $('footer').empty();
+    $('footer').append(`<h4>Created by Christopher Arsenault & Pratik Gauchan - chrisPratt Codes &copy; 2018</h4>`);
 }
 
 //  the rating method converts the numerical rating (if present) and displays stars in its place
@@ -148,7 +142,7 @@ foodApp.events = () => {
         $('.recipe-search-box').val($('.initial-search-box').val());
 
         foodApp.getAllRecipes(ingredients, '', '', '');
- 
+
     });
 
     $('.submit button').on('click', function (e) {
@@ -186,7 +180,7 @@ foodApp.events = () => {
     $('html').on('click', function () {
         $(".sub-menu").hide();
     });
-    
+
     // event listener that prevents sub-menu hiding if clicked inside the main-menu-options div
     $('.main-menu-options').on('click', function (e) {
         e.stopPropagation();
@@ -194,6 +188,7 @@ foodApp.events = () => {
 
     //  event listener for showing/hiding sub-menu of only course type while hiding other sub-menus
     $('.course-type button').on('click', function (e) {
+        $(".spinner-overlay").toggle();
         $(".course-type .sub-menu").toggle();
         $(".cuisine-type .sub-menu").hide();
         $(".dietary-restrictions .sub-menu").hide();
@@ -201,7 +196,8 @@ foodApp.events = () => {
     });
 
     //  event listener for showing/hiding sub-menu of only cuisine type while hiding other sub-menus
-    $('.cuisine-type button').on('click', function(e) {     
+    $('.cuisine-type button').on('click', function (e) {
+        $(".spinner-overlay").toggle();
         $(".cuisine-type .sub-menu").toggle();
         $(".course-type .sub-menu").hide();
         $(".dietary-restrictions .sub-menu").hide();
@@ -209,7 +205,8 @@ foodApp.events = () => {
     })
 
     //  event listener for showing/hiding sub-menu of only dietary restrictions while hiding other sub-menus
-    $('.dietary-restrictions button').on('click', function(e) {
+    $('.dietary-restrictions button').on('click', function (e) {
+        $(".spinner-overlay").toggle();
         $(".dietary-restrictions .sub-menu").toggle();
         $(".cuisine-type .sub-menu").hide();
         $(".course-type .sub-menu").hide();
@@ -227,7 +224,7 @@ foodApp.events = () => {
         } else {
             selectedHolder.push(selectedValue);
         }
-    });  
+    });
 }
 
 //  the init method initializes all the necessary methods when the page loads
